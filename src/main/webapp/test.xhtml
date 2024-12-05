@@ -11,10 +11,12 @@
         <h:outputStylesheet name="test.css" />
     </h:head>
     <h:body>
-
-        <h1>#{testView.string}</h1>
         <h:form id="frmTest">
-
+            <p:dataTable value="#{testTable}" var="item">
+                <p:column headerText="name" field="name" filterable="true">#{item.name}</p:column>
+                <p:column headerText="artist">#{item.artist}</p:column>
+                <p:column headerText="released">#{item.released}</p:column>
+            </p:dataTable>
         </h:form>
 
     </h:body>
