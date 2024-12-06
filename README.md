@@ -1,46 +1,17 @@
-![PrimeFaces icon](https://www.primefaces.org/wp-content/uploads/2016/10/prime_logo_new.png)
+Demonstration of FilterMeta bug
 
-# PrimeFaces Test
+Steps to reproduce:
 
-This is a sample maven project that uses <strong>Latest PrimeFaces Release</strong> version. If you have a PrimeFaces issue, please download or fork this project. Then, you should change these files by yourself so that PrimeFaces Team can see your problem. Finally, you can send a link or attach the project. <strong>Please make sure that project is runnable with the command below.</strong>
+1. Run console command `mvn clean jetty:run`
 
-You can execute the sample with <strong>mvn jetty:run</strong> command and hit <strong>http://localhost:8080/</strong> to run the page.
+2. Open browser on http://localhost:8080/
+<img src="./test-01.jpg" alt="initial view" />
 
-### Jakarta EE10 Version
-***
+3. Input letter "T" in the filter of column "name" and wait for results of filtering
+<img src="./test-02.jpg" alt="T-filtered view" />
 
-PrimeFaces Test is setup to run again Jakarta EE10 profile using Jetty 12. You can also use other versions with the available maven profiles: mojarra40, myfaces40
+4. Input yet any letters additionally in the filter of column "name" and wait for results of filtering
+<img src="./test-02.jpg" alt="The-filtered view" />
 
-`mvn clean jetty:run -Pmojarra40`
-
-`mvn clean jetty:run -Pmyfaces40`
-
-### Server Port
-***
-
-By default the application runs on port 8080 but if you would like to use a different port you can pass `-Djetty.port=5000` like:
-
-`mvn clean jetty:run -Djetty.port=5000`
-
-
-### JPA Lazy Datatable
-***
-
-The branch `jpa` contains a PrimeFaces Test setup to run with JPA using the JPA LazyDatatable advanced example.
-
-### Legacy JSF Versions
-***
-
-The branch `javax` contains a PrimeFaces Test setup to run again Jakarta EE10 profile using Jetty 9. Per default the application uses Mojarra 2.3.x. 
-You can also use other versions with the available maven profiles: myfaces23, myfaces23next, mojarra23
-
-`mvn clean jetty:run -Pmyfaces23`
-
-`mvn clean jetty:run -Pmyfaces23next`
-
-`mvn clean jetty:run -Pmojarra23`
-
-### Visual Studio Code Quickstart
-***
-
-See the [quickstart guide for running in Visual Studio Code](./vscode-quickstart.md) for more information.
+As can be noticed on step 4, after first non-empty filtering (on step 3) filtering is broken.
+The reason is that changing of filter value does not change [hashcode](https://github.com/bvfalcon/PrimeFaces-FilterMeta-test/blob/ab37140803893293da38af389e26bb83698777ab/src/main/java/org/primefaces/test/TestTable.java#L53) of filter object.
